@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+</head>
+
+<body>
+
+    <form onsubmit="loginUser(event)">
+        <label for="email">Enter Your Email</label>
+        <input type="email" name="email" id="email" required>
+        <label for="password">Password</label>
+        <input type="password" name="password" id="password" required>
+
+        <button type="submit">Login</button>
+    </form>
+
+    <p><a href="index.html">New User? SignUp</a></p>
+    <p><a href="forgotpassword.html">Forgot Password!</a></p>
+    <p id="message"></p>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.7.7/axios.min.js"></script>
+    <script src="index.js"></script>
+</body>
+
+</html>
