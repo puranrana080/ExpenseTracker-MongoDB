@@ -1,21 +1,47 @@
-const Sequelize=require('sequelize')
-const sequelize=require('../util/user')
+const mongoose = require('mongoose')
+const Schema = mongoose.Schema
 
-
-const Expense=sequelize.define('expense',{
+const expenseSchema= new Schema({
     amount:{
-        type:Sequelize.STRING,
-        allowNull:false
+        type:Number,
+        require:true,
     },
     description:{
-        type:Sequelize.STRING,
-        allowNull:false,
+        type:String,
+        required:true,
     },
-    category:{
-        type:Sequelize.STRING,
-        allowNull:false
+    category:{type:String,
+        required:true
+    },
+    userId:{
+        type:Schema.Types.ObjectId,
+        ref:"User",
+        required:true,
     }
+
 
 })
 
-module.exports= Expense
+module.exports=mongoose.model("Expense",expenseSchema)
+
+// const Sequelize=require('sequelize')
+// const sequelize=require('../util/user')
+
+
+// const Expense=sequelize.define('expense',{
+//     amount:{
+//         type:Sequelize.STRING,
+//         allowNull:false
+//     },
+//     description:{
+//         type:Sequelize.STRING,
+//         allowNull:false,
+//     },
+//     category:{
+//         type:Sequelize.STRING,
+//         allowNull:false
+//     }
+
+// })
+
+// module.exports= Expense

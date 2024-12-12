@@ -9,9 +9,11 @@ const authenticate = (req, res, next) => {
         console.log(token)
         const user = jwt.verify(token, 'secretecodeashdjkah')//decoded
         console.log(user.userId)
+        console.log("yess",user)
         
-        User.findByPk(user.userId)
+        User.findById(user.userId)
             .then(user => {
+                console.log("user",user)
                 req.user = user
                 next()
             })

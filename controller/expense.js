@@ -7,6 +7,7 @@ const AWS = require('aws-sdk')
 const UserServices = require('../services/userservices')
 const S3Services = require('../services/S3services')
 const FilesDownloaded = require('../model/filesdownloaded')
+const mongoose = require('mongoose')
 
 
 
@@ -16,42 +17,78 @@ exports.getExpenseFrom = (req, res, next) => {
 
 
 exports.postAddExpense = async (req, res, next) => {
-    const t = await sequelize.transaction()
-    try {
+    const session = await mongoose.startSession()
+    console.log("req.user",req.user)
+    try{
+        session.startTransaction();
         if (req.body.amount == undefined || req.body.amount === 0) {
-            return res.status(400).json({ message: "Parameter missing" })
-        }
+                    return res.status(400).json({ message: "Parameter missing" })
+                }
+        const expense = new Expense({
+            amount:req.body.amount,
+            description:req.body.description,
+            category:req.body.category,
+            userId:req.user._id
+        })
+        await expense.save({session})
 
+        await User.findByIdAndUpdate(req.user._id,{$inc:{totalAmount:req.body.amount}},{session})
 
-        const expense = await Expense.create({
-            amount: req.body.amount,
-            description: req.body.description,
-            category: req.body.category,
-            userId: req.user.id
-        }, { transaction: t })
-
-        const user = await User.findByPk(req.user.id, { transaction: t })
-        user.total_cost += parseFloat(req.body.amount)
-
-        await user.save({ transaction: t })
-
-        await t.commit()
+        await session.commitTransaction()
 
         console.log(expense)
-        res.status(200).json({
-            expenseData: expense,
-            message: "Expense added in db"
-        })
 
+        return res.status(200).json({
+                    expenseData: expense,
+                    message: "Expense added in db"
+                })
     }
-    catch (error) {
-
-        await t.rollback()
-        console.log(error)
+    catch(error){
+        await session.abortTransaction()
         res.status(500).json({
-            error: "Failed to add expense and update total user"
-        })
+                    error: "Failed to add expense and update total user"
+                })
+
     }
+
+
+
+    // const t = await sequelize.transaction()
+    // try {
+    //     if (req.body.amount == undefined || req.body.amount === 0) {
+    //         return res.status(400).json({ message: "Parameter missing" })
+    //     }
+
+
+    //     const expense = await Expense.create({
+    //         amount: req.body.amount,
+    //         description: req.body.description,
+    //         category: req.body.category,
+    //         userId: req.user.id
+    //     }, { transaction: t })
+
+    //     const user = await User.findByPk(req.user.id, { transaction: t })
+    //     user.total_cost += parseFloat(req.body.amount)
+
+    //     await user.save({ transaction: t })
+
+    //     await t.commit()
+
+    //     console.log(expense)
+    //     res.status(200).json({
+    //         expenseData: expense,
+    //         message: "Expense added in db"
+    //     })
+
+    // }
+    // catch (error) {
+
+    //     await t.rollback()
+    //     console.log(error)
+    //     res.status(500).json({
+    //         error: "Failed to add expense and update total user"
+    //     })
+    // }
 
 }
 

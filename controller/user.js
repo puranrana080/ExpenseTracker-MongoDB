@@ -15,16 +15,17 @@ exports.getRegisterForm = (req, res, next) => {
 exports.postRegisterForm = async (req, res, next) => {
     try {
         console.log(req.body)
-        const { userName, userEmail, password } = req.body
+        const { name, email, password } = req.body
 
 
-        const existingUser = await User.findOne({
-            where: {
-                userEmail: userEmail
-            }
+        // const existingUser = await User.findOne({
+        //     where: {
+        //         userEmail: userEmail
+        //     }
 
-        })
-        console.log(existingUser)
+        // })
+        const existingUser = await User.findOne({email:email})
+        
         if (existingUser) {
             return res.status(400).json({ message: "User Already exist, Try with new Email" })
         }
@@ -34,11 +35,18 @@ exports.postRegisterForm = async (req, res, next) => {
             if (err) {
                 console.log("err:", err)
             }
-            await User.create({
-                userName,
-                userEmail,
-                password: hash
-            })
+            // await User.create({
+            //     userName,
+            //     userEmail,
+            //     password: hash
+            // })
+             const user=new User({
+                name:name,
+                email:email,
+                password:hash
+             })
+             await user.save()
+
             res.status(201).json({ message: "Successfully created new user" })
         })
 
@@ -59,16 +67,14 @@ function generateAccessToken(id) {
 exports.postLoginForm = async (req, res, next) => {
     try {
         console.log(req.body)
-        const userAvailable = await User.findOne({
-            where: { userEmail: req.body.email }
-        })
+        const userAvailable = await User.findOne({email: req.body.email})
         if (userAvailable) {
 
             const isPasswordValid = await bcrypt.compare(req.body.password, userAvailable.password);
 
             if (isPasswordValid) {
                 console.log("login successful")
-                res.status(200).json({ message: "logged in", token: generateAccessToken(userAvailable.id) })
+                res.status(200).json({ message: "logged in", token: generateAccessToken(userAvailable._id) })
 
             }
 

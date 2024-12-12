@@ -8,20 +8,34 @@ exports.purchasePremium = async (req, res, next) => {
             key_id: process.env.RAZORPAY_KEY_ID,
             key_secret: process.env.RAZORPAY_KEY_SECRET
         })
-        const amount = 2500;
-        rzp.orders.create({ amount, currency: 'INR' }, (err, order) => {
+        const amount = 4900;
+        rzp.orders.create({ amount, currency: 'INR' },(err, order) => {
             if (err) { throw new Error(err) }
+            console.log("this is h",order)
 
-            req.user.createOrder({
-                orderid: order.id,
-                status: "PENDING"
+            const orders = new Order({
+                orderId:order.id,
+                status:"PENDING",
+                userId:req.user._id
             })
-                .then(() => {
-                    return res.status(201).json({ order, key_id: rzp.key_id })
-                })
-                .catch(err => {
-                    throw new Error(err)
-                })
+            orders.save()
+            .then(()=>{
+                return res.status(201).json({order,key_id:rzp.key_id})
+            })
+            .catch(err => {
+                        throw new Error(err)
+                    })
+
+            // req.user.createOrder({
+            //     orderid: order.id,
+            //     status: "PENDING"
+            // })
+            //     .then(() => {
+            //         return res.status(201).json({ order, key_id: rzp.key_id })
+            //     })
+            //     .catch(err => {
+            //         throw new Error(err)
+                // })
         })
     }
     catch (err) {
@@ -33,17 +47,24 @@ exports.purchasePremium = async (req, res, next) => {
 exports.updateTransactionStatus = async (req, res) => {
     try {
         const { payment_id, order_id } = req.body;
-        const order = await Order.findOne({ where: { orderid: order_id } })
 
-        const promise1 = order.update({ paymentid: payment_id, status: 'SUCCESSFUL' })
-        const promise2 = req.user.update({ ispremiumuser: true })
-        Promise.all([promise1, promise2])
-            .then(() => {
-                return res.status(202).json({ message: "Transaction Successful" })
-            })
-            .catch(err => {
-                throw new Error(err)
-            })
+        await Order.findOneAndUpdate({orderId:order_id},{paymentId:payment_id,status:"SUCCESSFUL"});
+
+        req.user.isPremiumUser=true
+        await req.user.save()
+
+        return res.status(202).json({ message: "Transaction Successful" })
+        // const order = await Order.findOne({ orderId: order_id })
+
+        // const promise1 = order.update({ paymentid: payment_id, status: 'SUCCESSFUL' })
+        // const promise2 = req.user.update({ ispremiumuser: true })
+        // Promise.all([promise1, promise2])
+        //     .then(() => {
+        //         return res.status(202).json({ message: "Transaction Successful" })
+        //     })
+        //     .catch(err => {
+        //         throw new Error(err)
+        //     })
     }
     catch (err) {
         console.log("Error in updating transaction status", err)

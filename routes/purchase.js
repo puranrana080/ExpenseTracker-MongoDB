@@ -8,7 +8,7 @@ router.get('/purchase/premiummembership', userauthentication.authenticate, purch
 
 router.post('/purchase/updatetransactionstatus',userauthentication.authenticate,purchaseController.updateTransactionStatus)
 
-router.post('/purchase/failedtransactionstatus',userauthentication.authenticate,purchaseController.updateTransactionStatusToFailed)
+// router.post('/purchase/failedtransactionstatus',userauthentication.authenticate,purchaseController.updateTransactionStatusToFailed)
 
 
 module.exports = router

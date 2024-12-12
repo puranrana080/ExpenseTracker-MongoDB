@@ -1,18 +1,18 @@
-const Sequelize = require('sequelize')
-const sequelize = require('../util/user')
+// const Sequelize = require('sequelize')
+// const sequelize = require('../util/user')
 
 
-const FilesDownloaded = sequelize.define('filesdownloaded', {
+// const FilesDownloaded = sequelize.define('filesdownloaded', {
 
 
-    filedownloadedURL: {
-        type: Sequelize.STRING,
-        allowNull: false,
-    }
+//     filedownloadedURL: {
+//         type: Sequelize.STRING,
+//         allowNull: false,
+//     }
 
 
 
 
-})
+// })
 
-module.exports = FilesDownloaded
+// module.exports = FilesDownloaded

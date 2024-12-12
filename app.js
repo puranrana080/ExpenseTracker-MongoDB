@@ -1,16 +1,16 @@
 const express = require('express')
 const path = require('path')
 const fs = require('fs')
+const mongoose = require('mongoose')
 
-const sequelize = require("./util/user")
 const User = require('./model/user')
 const Expense = require('./model/expense')
 const Order = require('./model/order')
 const FilesDownloaded = require('./model/filesdownloaded')
+const ForgotPasswordRequests = require('./model/forgotpasswordrequests')
 const app = express()
 const cors = require('cors')
-const ForgotPasswordRequests = require('./model/forgotpasswordrequests')
-const axios = require('axios')
+
 const Razorpay = require("razorpay")
 const morgan = require('morgan')
 
@@ -35,8 +35,8 @@ app.use(express.urlencoded({ extended: true }))
 app.use(userRoutes)
 app.use(expenseRoutes)
 app.use(purchaseRoutes)
-app.use(premiumRoutes)
-app.use(passwordRoutes)
+// app.use(premiumRoutes)
+// app.use(passwordRoutes)
 
 app.use((req, res) => {
     console.log('url', req.url)
@@ -44,31 +44,40 @@ app.use((req, res) => {
 })
 
 
-User.hasMany(Expense)
-Expense.belongsTo(User)
+// User.hasMany(Expense)
+// Expense.belongsTo(User)
 
-User.hasMany(Order)
-Order.belongsTo(User)
+// User.hasMany(Order)
+// Order.belongsTo(User)
 
-User.hasMany(ForgotPasswordRequests)
-ForgotPasswordRequests.belongsTo(User)
+// User.hasMany(ForgotPasswordRequests)
+// ForgotPasswordRequests.belongsTo(User)
 
-User.hasMany(FilesDownloaded)
-FilesDownloaded.belongsTo(User)
-
-
+// User.hasMany(FilesDownloaded)
+// FilesDownloaded.belongsTo(User)
 
 
-sequelize.sync()
-    // sequelize.sync({force:true})
+mongoose.connect('mongodb+srv://puranrana:Puran080@cluster0.066ki.mongodb.net/ExpenseTracker?retryWrites=true&w=majority&appName=Cluster0')
+.then(result=>{
+    app.listen(3000)
+    console.log("Connected!")
+})
+.catch(err=>{
+    console.log(err)
+})
 
-    .then(() => {
-        app.listen(process.env.PORT || 3000, () => {
-            console.log("inside port")
+// sequelize.sync()
+//     // sequelize.sync({force:true})
 
-        })
+//     .then(() => {
+//         app.listen(process.env.PORT || 3000, () => {
+//             console.log("inside port")
 
-    })
-    .catch(err => {
-        console.log(err)
-    })
+//         })
+
+//     })
+//     .catch(err => {
+//         console.log(err)
+//     })
+
+     
