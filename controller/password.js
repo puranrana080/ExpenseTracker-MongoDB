@@ -16,19 +16,31 @@ exports.forgotPassword = async (req, res, next) => {
     try {
         //finding user with reset email and then its id to create reset table , 
         //  once created then fetched its uuid with user id , then pass in email body
-        const user = await User.findOne({ where: { userEmail: req.body.email } })
-        if (!user) {
-            return res.status(404).json({ message: 'User not found' });
+        // const user = await User.findOne({ where: { userEmail: req.body.email } })
+        // if (!user) {
+        //     return res.status(404).json({ message: 'User not found' });
+        // }
+        // console.log(user)
+
+        const user = await User.findOne({email:req.body.email}).select('_id')
+        if(!user){
+            res.status(404).json({message:"User not available with this email"})
         }
-        console.log(user)
+        console.log("this si user resting forgot password",user)
 
-        const forgotpasswordrequest = await ForgotPasswordRequests.create({
-            userId: user.id
+
+        // const forgotpasswordrequest = await ForgotPasswordRequests.create({
+        //     userId: user.id
+        // })
+        const forgotPasswordRequest=new ForgotPasswordRequests({
+            userId:user._id
         })
-        console.log(forgotpasswordrequest)
-        const resetRequest = await ForgotPasswordRequests.findOne({ where: { userId: user.id } })
+        await forgotPasswordRequest.save()
+        console.log("this ID is used to update password",forgotPasswordRequest._id)
 
-        console.log("This is the request id", resetRequest.id)
+        const resetRequest = await ForgotPasswordRequests.findOne({ userId: user._id  })
+
+        console.log("This is the request id", resetRequest._id)
 
 
 
@@ -53,7 +65,7 @@ exports.forgotPassword = async (req, res, next) => {
             sender,
             to: receivers,
             subject: 'Link for the reset',
-            textContent: `http://localhost:3000/password/resetpassword/${resetRequest.id} "click here for reset"`
+            textContent: `http://localhost:3000/password/resetpassword/${resetRequest._id} "click here for reset"`
         })
 
         console.log("Email sent successfully:", response);
@@ -71,10 +83,10 @@ exports.resetPasswordRequest = async (req, res, next) => {
     try {
         const uuid = req.params.uuid
         console.log(">>>>>>..", uuid)
-        const resetRequest = await ForgotPasswordRequests.findOne({ where: { id: uuid, isactive: true } })
+        const resetRequest = await ForgotPasswordRequests.findOne({ _id: uuid, isActive: true } )
 
         if (resetRequest) {
-            console.log("password rest Form")
+            console.log("password reset Form")
             res.redirect(`/update_password.html?uuid=${uuid}`)
         }
         else {
@@ -95,13 +107,13 @@ exports.updatePassword = async (req, res, next) => {
 
         const { uuid, newPassword } = req.body
 
-        const resetRequest = await ForgotPasswordRequests.findOne({ where: { id: uuid, isactive: true } })
+        const resetRequest = await ForgotPasswordRequests.findOne({ _id: uuid, isActive: true  })
 
         if (!resetRequest) {
             return res.status(400).json({ message: "Invalid or expired reset request" });
         }
 
-        const user = await User.findOne({ where: { id: resetRequest.userId } })
+        // const user = await User.findOne( { _id: resetRequest.userId } )
 
         const saltRounds = 10;
 
@@ -109,9 +121,12 @@ exports.updatePassword = async (req, res, next) => {
             // if (err) {
             //     console.log("err", err)
             // }
-            await user.update({ password: hash })
+            // await user.update({ password: hash })
 
-            await ForgotPasswordRequests.update({ isactive: false }, { where: { id: uuid } })
+            await User.updateOne({_id:resetRequest.userId},{password:hash})
+
+            // await ForgotPasswordRequests.update({ isactive: false }, { where: { id: uuid } })
+            await ForgotPasswordRequests.updateOne({_id:uuid},{isActive:false})
 
             res.status(200).json({ message: "Password Updated successfully" })
         

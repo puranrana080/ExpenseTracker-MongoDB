@@ -36,7 +36,7 @@ app.use(userRoutes)
 app.use(expenseRoutes)
 app.use(purchaseRoutes)
 app.use(premiumRoutes)
-// app.use(passwordRoutes)
+app.use(passwordRoutes)
 
 app.use((req, res) => {
     console.log('url', req.url)
