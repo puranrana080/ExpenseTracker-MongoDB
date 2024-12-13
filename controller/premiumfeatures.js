@@ -6,17 +6,20 @@ const FilesDownloaded = require('../model/filesdownloaded')
 
 
 
+
 exports.getUserLeaderBoard = async (req, res) => {
     try {
 
-        const leaderboardofusers = await User.findAll({
-            attributes: ['id', 'userName', 'total_cost'],
-            // group: ['users.id'],
-            order: [['total_cost', 'DESC']]
-        })
+        // const leaderboardofusers = await User.findAll({
+        //     attributes: ['id', 'userName', 'total_cost'],
+        //     // group: ['users.id'],
+        //     order: [['total_cost', 'DESC']]
+        // })
 
-        console.log(leaderboardofusers)
-        res.status(200).json(leaderboardofusers)
+        const leaderBoardOfUsers=await User.find().select('name totalAmount')
+
+        console.log(leaderBoardOfUsers)
+        res.status(200).json(leaderBoardOfUsers)
     }
     catch (err) {
         console.log(err)
@@ -26,9 +29,11 @@ exports.getUserLeaderBoard = async (req, res) => {
 
 exports.getUserDownloadList = async (req, res, next) => {
     try {
-        const userId = req.user.id
+        const userId = req.user._id
         console.log("This is user Id ", userId)
-        const userDownloads = await FilesDownloaded.findAll({ where: { userId: userId } })
+        // const userDownloads = await FilesDownloaded.findAll({ where: { userId: userId } })
+
+        const userDownloads = await FilesDownloaded.find({userId:userId})
 
         return res.status(200).json({ userDownloads })
 

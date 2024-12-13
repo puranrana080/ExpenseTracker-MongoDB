@@ -35,7 +35,7 @@ app.use(express.urlencoded({ extended: true }))
 app.use(userRoutes)
 app.use(expenseRoutes)
 app.use(purchaseRoutes)
-// app.use(premiumRoutes)
+app.use(premiumRoutes)
 // app.use(passwordRoutes)
 
 app.use((req, res) => {

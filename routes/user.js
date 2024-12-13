@@ -16,11 +16,11 @@ router.post('/user/register', userController.postRegisterForm)
 
 router.post("/user/login", userController.postLoginForm)
 
-// router.get('/user/ispremium',userauthentication.authenticate,purchaseController.checkUserPremium)
+router.get('/user/ispremium',userauthentication.authenticate,purchaseController.checkUserPremium)
 
-// router.get('/user/download',userauthentication.authenticate,expenseController.downloadexpense)
+router.get('/user/download',userauthentication.authenticate,expenseController.downloadexpense)
 
-// router.get('/user/downloadlist',userauthentication.authenticate,premiumController.getUserDownloadList)
+router.get('/user/downloadlist',userauthentication.authenticate,premiumController.getUserDownloadList)
 
 
 module.exports = router

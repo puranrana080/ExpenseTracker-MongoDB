@@ -75,10 +75,9 @@ exports.updateTransactionStatus = async (req, res) => {
 exports.updateTransactionStatusToFailed = async (req, res) => {
     try {
         const { order_id } = req.body
-        console.log("$$$$$$$$$$$$$$$")
-        const order = await Order.findOne({ where: { orderid: order_id } })
-
-        await order.update({ status: "FAILED" })
+        await Order.findOneAndUpdate({orderId:order_id},{status:"FAILED"})
+        // const order = await Order.findOne({ where: { orderid: order_id } })
+        // await order.update({ status: "FAILED" })
         return res.status(200).json({ message: "Maked as failed" })
 
     }
@@ -95,7 +94,7 @@ exports.checkUserPremium = async (req, res) => {
 
     try {
         const user = await req.user
-        res.status(200).json({ isPremiumUser: user.ispremiumuser })
+        res.status(200).json({ isPremiumUser: user.isPremiumUser })
     }
     catch (err) {
         res.status(500).json({ message: "Unable to fetch", error: err.message })

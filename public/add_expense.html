@@ -1,64 +1,78 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Add Expense</title>
-</head>
+    <style>
+      body {
+        text-align: center;
+        height: 90vh;
+        margin-top: 20px;
+        background-color: aquamarine;
+        /* border: 1px solid black; */
+        font-family: sans-serif;
+      }
+      form{
+        margin-bottom: 20px;
+      }
+      ul {
+        list-style-type: none;
+      }
+      #expense-list p {
+        margin: 1px;
+        padding: 2px;
+        /* background-color: red; */
+      }
+      ul {
+        list-style-type: none;
+      }
+    </style>
+  </head>
 
-<body>
-    
-
+  <body>
     <form onsubmit="handleAddExpense(event)">
-        <label for="amount">Choose ExpenseAmount</label>
-        <input type="text" id="amount" name="amount" required>
-        <label for="description">Choose description</label>
-        <input type="text" id="description" name="description">
-        <label for="category">Choose a category</label>
-        <select name="category" id="category">
-            <option value="" disabled selected>Select any one</option>
-            <option value="food">Food</option>
-            <option value="petrol">Petrol</option>
-            <option value="salery">Salery</option>
-        </select>
+      <label for="amount">Choose ExpenseAmount</label>
+      <input type="text" id="amount" name="amount" required />
+      <label for="description">Choose description</label>
+      <input type="text" id="description" name="description" />
+      <label for="category">Choose a category</label>
+      <select name="category" id="category">
+        <option value="" disabled selected>Select any one</option>
+        <option value="food">Food</option>
+        <option value="petrol">Petrol</option>
+        <option value="salery">Salery</option>
+      </select>
 
-        <button type="submit">Add Expense</button>
-
+      <button type="submit">Add Expense</button>
     </form>
     <div id="message"></div>
     <button id="rzp-button">Buy Premium</button>
     <button id="downloadexpense">Download File</button>
 
-   
     <h1 id="expenselist">Expense</h1>
     <label for="itemsPerPage">Expenses per Page:</label>
     <select id="itemsPerPage" onchange="setItemsPerPage()">
-        <option value="2">2</option>
-        <option value="5" selected>5</option>
-        <option value="10">10</option>
-        <option value="20">20</option>
+      <option value="2">2</option>
+      <option value="5" selected>5</option>
+      <option value="10">10</option>
+      <option value="20">20</option>
     </select>
     <ul id="expense-list"></ul>
     <div id="pagination"></div>
     <div id="listofdownloads">
-        <h1>List Of Downloads</h1>
-        <ol id="downloadlist" style="list-style-type: none">
-            <li>No files downloaded yet!</li>
-
-        </ol>
+      <h1>List Of Downloads</h1>
+      <ol id="downloadlist" style="list-style-type: none">
+        <li>No files downloaded yet!</li>
+      </ol>
     </div>
 
     <ul id="leaderboard"></ul>
 
     <ol id="listofdownloads"></ol>
 
-    
     <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.7.7/axios.min.js"></script>
-   <script src="add_expense.js"></script>
-
-
-</body>
-
+    <script src="add_expense.js"></script>
+  </body>
 </html>

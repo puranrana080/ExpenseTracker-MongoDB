@@ -21,10 +21,9 @@ const userSchema = new Schema({
         type:Number,
         default:0,
     }
-
-
-
 })
+
+
 
 module.exports=mongoose.model('User',userSchema);
 
