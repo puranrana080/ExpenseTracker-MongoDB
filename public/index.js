@@ -11,8 +11,8 @@ function registeringUser(event) {
     .then((response) => {
       console.log("User Added Successfully", response.data.message);
       event.target.reset();
-      alert("Signed in successful")
-      window.location.href='/login.html'
+      alert("Signed in successful");
+      window.location.href = "/login.html";
     })
     .catch((err) => {
       const p = document.querySelector("#message");

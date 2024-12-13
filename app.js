@@ -3,11 +3,6 @@ const path = require('path')
 const fs = require('fs')
 const mongoose = require('mongoose')
 
-// const User = require('./model/user')
-// const Expense = require('./model/expense')
-// const Order = require('./model/order')
-// const FilesDownloaded = require('./model/filesdownloaded')
-// const ForgotPasswordRequests = require('./model/forgotpasswordrequests')
 const app = express()
 const cors = require('cors')
 
@@ -43,20 +38,6 @@ app.use((req, res) => {
     res.sendFile(path.join(__dirname, `public/${req.url}`))
 })
 
-
-// User.hasMany(Expense)
-// Expense.belongsTo(User)
-
-// User.hasMany(Order)
-// Order.belongsTo(User)
-
-// User.hasMany(ForgotPasswordRequests)
-// ForgotPasswordRequests.belongsTo(User)
-
-// User.hasMany(FilesDownloaded)
-// FilesDownloaded.belongsTo(User)
-
-
 mongoose.connect('mongodb+srv://puranrana:Puran080@cluster0.066ki.mongodb.net/ExpenseTracker?retryWrites=true&w=majority&appName=Cluster0')
 .then(result=>{
     app.listen(3000)
@@ -66,18 +47,5 @@ mongoose.connect('mongodb+srv://puranrana:Puran080@cluster0.066ki.mongodb.net/Ex
     console.log(err)
 })
 
-// sequelize.sync()
-//     // sequelize.sync({force:true})
-
-//     .then(() => {
-//         app.listen(process.env.PORT || 3000, () => {
-//             console.log("inside port")
-
-//         })
-
-//     })
-//     .catch(err => {
-//         console.log(err)
-//     })
 
      
