@@ -163,6 +163,7 @@ if(ElePerPage){
             document.getElementById('downloadlist').innerHTML=''
 
             downloadlistresponse.data.userDownloads.forEach((list, i) => {
+
                 displayDownloadList(list, i)
             })
 
@@ -255,12 +256,12 @@ function showPagination({currentPage,
     }
 
 }
+//-pagination
 
 
 
 
 
-// pagination
 function displayDownloadList(downloadList, i) {
     const olList = document.getElementById('downloadlist')
 
@@ -309,6 +310,7 @@ function download() {
             if (response.status === 200) {
                 // the backend will send download link, and when we open it in browser,
                 // file gets downloaded
+                console.log("HEYHTHISHDH",response.data.fileURL)
                 const a = document.createElement("a");
                 a.href = response.data.fileURL;
                 a.download = 'myexpense.csv';
@@ -316,11 +318,14 @@ function download() {
                 a.click();
                 document.body.removeChild(a)
                 const newFile = {
-                    filedownloadedURL: response.data.fileURL
+                    fileDownloadedURL: response.data.fileURL
                 };
 
-                const downloadlist = document.getElementById('downloadlist');
-                displayDownloadList(newFile, downloadlist.childElementCount)
+                window.location.reload()
+
+                // const downloadlist = document.getElementById('downloadlist');
+                // displayDownloadList(newFile, downloadlist.childElementCount)
+
 
             } else {
                 throw new Error("Invalid response")
@@ -329,11 +334,9 @@ function download() {
 
         })
         .catch((err) => {
-            if(err.response.data.message){
-                alert("No files to download")
-            }else{
+            
 
             alert("Buy Premium to Download File", err)}
             
-        });
+        );
 }

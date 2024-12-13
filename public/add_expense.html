@@ -14,18 +14,51 @@
         font-family: sans-serif;
       }
       form{
-        margin-bottom: 20px;
+            margin:40px auto;
+            border:1px solid black;
+            padding:30px;
+            width:80%;
+            border-radius: 10px;
+        
       }
-      ul {
-        list-style-type: none;
-      }
-      #expense-list p {
+      
+        ul {
+    display: flex;
+    flex-direction: column; /* Ensure items are stacked vertically */
+    align-items: center;    /* Horizontally center the content */
+}
+      
+       /* #expense-list p {
         margin: 1px;
         padding: 2px;
-        /* background-color: red; */
+        background-color: red;
+         border-radius: 5px; 
+      }  */
+      #leaderboard li{
+        margin: 1px;
+        padding: 2px;
+        background-color: rgb(225, 216, 119);
+        width:40%;
+        text-align: center;
+        border-radius: 5px;
+      }
+      #leaderboard{
+        padding-bottom:30px;
+        /* border: 1px solid red; */
+        margin:50px auto;
+        
       }
       ul {
         list-style-type: none;
+      }
+      
+      #expense-list p{
+        margin: 1px;
+        padding: 2px;
+        background-color: rgb(158, 225, 119);
+        width:40%;
+        text-align: center;
+        border-radius: 5px;
       }
     </style>
   </head>
@@ -41,7 +74,10 @@
         <option value="" disabled selected>Select any one</option>
         <option value="food">Food</option>
         <option value="petrol">Petrol</option>
-        <option value="salery">Salery</option>
+        <option value="saving">Saving</option>
+        <option value="groceries">Groceries</option>
+        <option value="cloths">Cloths</option>
+        <option value="other">Other</option>
       </select>
 
       <button type="submit">Add Expense</button>
@@ -69,7 +105,7 @@
 
     <ul id="leaderboard"></ul>
 
-    <ol id="listofdownloads"></ol>
+    <!-- <ol id="listofdownloads"></ol> -->
 
     <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.7.7/axios.min.js"></script>
